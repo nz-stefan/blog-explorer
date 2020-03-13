@@ -232,10 +232,10 @@ loginfo("Exporting data model to '%s'", F_APP_DATA_MODEL)
 
 # prepare list with all objects to export
 l_export <- list(
-  n_blogs <- n_blogs,
-  n_authors <- n_authors,
-  n_words <- n_words,
-  n_book_pages <- n_book_pages,
+  n_blogs = n_blogs,
+  n_authors = n_authors,
+  n_words = n_words,
+  n_book_pages = n_book_pages,
   n_topics = NUM_TOPICS,
   d_top_terms = d_top_terms,
   d_gamma_terms = d_gamma_terms,
