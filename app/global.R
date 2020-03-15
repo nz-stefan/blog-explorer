@@ -8,9 +8,19 @@
 
 library(shiny)
 library(dplyr)
+library(echarts4r)
+library(visNetwork)
+library(glue)
+
+
+
+# Utilities ---------------------------------------------------------------
+
+source("utils/ui-utils.R")
 
 
 
 # Modules -----------------------------------------------------------------
 
 source("modules/mod_count_icon.R")
+source("modules/mod_topics_graph.R")

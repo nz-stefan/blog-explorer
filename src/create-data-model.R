@@ -102,11 +102,21 @@ d_sparse <-
 
 # Extract basic stats -----------------------------------------------------
 
+# extract basic counts
 n_blogs <- n_distinct(d_tidy$doc_id)
 n_authors <- n_distinct(d_tidy$blog_author)
 n_words <- nrow(d_tidy)
 n_book_pages <- round(n_words / 300)  # about 300 words per typical book page
+n_publication_dates <- n_distinct(d_tidy$publication_date)
 
+# number of documents per month
+d_monthly_blogs <- 
+  d_tidy %>% 
+  mutate(publication_month = lubridate::floor_date(publication_date, "month")) %>% 
+  group_by(publication_month) %>% 
+  summarise(n_docs = n_distinct(doc_id))
+
+# d_monthly_blogs %>% ggplot(aes(x = publication_month, y = n_docs)) + geom_line()
 
 
 
@@ -133,7 +143,7 @@ d_top_terms <-
   d_beta %>%
   arrange(beta) %>%
   group_by(topic) %>%
-  top_n(7, beta) %>%
+  top_n(100, beta) %>%
   mutate(top_word = beta == max(beta)) %>% 
   arrange(topic) %>%
   ungroup()
@@ -171,8 +181,11 @@ d_nodes <-
     d_gamma_terms %>% filter(top_word) %>% select(topic, gamma),
     by  = c(id = "topic")
   ) %>% 
-  mutate(size = 1000 * gamma) %>% 
-  select(id, label = term, size)
+  mutate(
+    size = 1000 * gamma,
+    font.size = 3 * size
+  ) %>%
+  select(id, label = term, size, font.size)
 
 # add additional properties to the graph edges
 d_edges <- 
@@ -232,11 +245,14 @@ loginfo("Exporting data model to '%s'", F_APP_DATA_MODEL)
 
 # prepare list with all objects to export
 l_export <- list(
+  last_refresh = Sys.Date(),
   n_blogs = n_blogs,
   n_authors = n_authors,
   n_words = n_words,
   n_book_pages = n_book_pages,
+  n_publication_dates = n_publication_dates,
   n_topics = NUM_TOPICS,
+  d_monthly_blogs = d_monthly_blogs,
   d_top_terms = d_top_terms,
   d_gamma_terms = d_gamma_terms,
   d_nodes = d_nodes,

@@ -15,7 +15,27 @@ server <- function(input, output, session) {
   callModule(count_icon, "word_counter", d_data_model, "n_words")
   callModule(count_icon, "page_counter", d_data_model, "n_book_pages")
   
-  # output$lala <- renderUI({
-  #   HTML('<h3 class="count-to font-alt" data-countto="12345"></h3>')
-  # })
+  callModule(topics_graph, "topics_graph", d_data_model)
+  
+  output$plot_monthly_blogs <- renderEcharts4r({
+    req(d_data_model())
+
+    d_data_model()$d_monthly_blogs %>%
+      e_charts(publication_month) %>%
+      e_line(n_docs, name = "Number of blogs", smooth = TRUE, symbol = "none") %>%
+      e_title("Number of monthly blogs") %>%
+      e_legend(show = FALSE) %>%
+      e_tooltip(trigger = "axis") %>%
+      e_theme("walden")    # also good: westeros, auritus, walden
+  })
+  
+  output$last_refresh <- renderUI({
+    last_refresh_formatted <- strftime(d_data_model()$last_refresh, format = "%d %b %Y")
+    
+    HTML(glue("Last data refresh occurred on <strong>{ last_refresh_formatted }</strong>."))
+  })
+  
+  
+  output$sometest <- renderText(input$mybutton)
+  
 }
