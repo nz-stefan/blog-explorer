@@ -14,20 +14,11 @@ server <- function(input, output, session) {
   callModule(count_icon, "author_counter", d_data_model, "n_authors")
   callModule(count_icon, "word_counter", d_data_model, "n_words")
   callModule(count_icon, "page_counter", d_data_model, "n_book_pages")
+
+  callModule(insights_charts, "insights_charts", d_data_model)
   
   callModule(topics_graph, "topics_graph", d_data_model)
   
-  output$plot_monthly_blogs <- renderEcharts4r({
-    req(d_data_model())
-
-    d_data_model()$d_monthly_blogs %>%
-      e_charts(publication_month) %>%
-      e_line(n_docs, name = "Number of blogs", smooth = TRUE, symbol = "none") %>%
-      e_title("Number of monthly blogs") %>%
-      e_legend(show = FALSE) %>%
-      e_tooltip(trigger = "axis") %>%
-      e_theme("walden")    # also good: westeros, auritus, walden
-  })
   
   output$last_refresh <- renderUI({
     last_refresh_formatted <- strftime(d_data_model()$last_refresh, format = "%d %b %Y")

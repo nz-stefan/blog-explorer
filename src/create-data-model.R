@@ -114,9 +114,32 @@ d_monthly_blogs <-
   d_tidy %>% 
   mutate(publication_month = lubridate::floor_date(publication_date, "month")) %>% 
   group_by(publication_month) %>% 
-  summarise(n_docs = n_distinct(doc_id))
+  summarise(
+    n_docs = n_distinct(doc_id),
+    n_authors = n_distinct(blog_author)
+  )
 
 # d_monthly_blogs %>% ggplot(aes(x = publication_month, y = n_docs)) + geom_line()
+# d_monthly_blogs %>% ggplot(aes(x = publication_month, y = n_authors)) + geom_line()
+
+d_avg_words <- 
+  d_tidy %>% 
+  mutate(publication_month = lubridate::floor_date(publication_date, "month")) %>% 
+  group_by(publication_month, doc_id) %>% 
+  summarise(n_words = n()) %>%  
+  summarise(
+    quant_25 = quantile(n_words, 0.25),
+    median_words = median(n_words),
+    quant_75 = quantile(n_words, 0.75)
+  )
+
+# d_avg_words %>% ggplot(aes(x = publication_month, y = median_words, ymin = quant_25, ymax = quant_75)) + geom_line() + geom_ribbon(alpha = 0.25)
+
+d_day_of_week <- 
+  d_tidy %>% 
+  mutate(day_of_week = lubridate::wday(publication_date, label = TRUE)) %>% 
+  group_by(day_of_week) %>% 
+  summarise(n_docs = n_distinct(doc_id))
 
 
 
@@ -253,6 +276,8 @@ l_export <- list(
   n_publication_dates = n_publication_dates,
   n_topics = NUM_TOPICS,
   d_monthly_blogs = d_monthly_blogs,
+  d_avg_words = d_avg_words,
+  d_day_of_week = d_day_of_week,
   d_top_terms = d_top_terms,
   d_gamma_terms = d_gamma_terms,
   d_nodes = d_nodes,

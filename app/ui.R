@@ -5,14 +5,6 @@
 # Created: 2020-03-04 09:34:50
 ################################################################################
 
-# fluidPage(
-#   tagList(
-#     actionButton("mybutton", label = "click"),
-#     textOutput("sometest"),
-#     topics_graph_ui("topics_graph_abc")
-#   )
-# )
-
 
 htmlTemplate(
   filename = "www/index.html",
@@ -20,7 +12,7 @@ htmlTemplate(
   author_counter = count_icon_ui("author_counter", icon = "icon-profile-female", icon_text = "Authors"),
   word_counter = count_icon_ui("word_counter", icon = "icon-search", icon_text = "Words"),
   page_counter = count_icon_ui("page_counter", icon = "icon-book-open", icon_text = "Equivalent Book Pages"),
-  plot_monthly_blogs = echarts4rOutput("plot_monthly_blogs"),
+  insights_charts = insights_charts_ui("insights_charts"),
   last_refresh = uiOutput("last_refresh"),
   topics_graph = topics_graph_ui("topics_graph")
 

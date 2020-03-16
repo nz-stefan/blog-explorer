@@ -95,7 +95,7 @@ topics_graph <- function(input, output, session, d_data_model) {
     d_data_model()$d_top_terms %>% 
       filter(topic == input$graph_selected) %>% 
       e_charts() %>% 
-      e_cloud(term, beta, shape = "circle", sizeRange = c(10, 48), width = "90%", height = "90%") %>% 
+      e_cloud(term, beta, shape = "circle", sizeRange = c(10, 48), width = "90%", height = "90%", rotationRange = c(0, 0)) %>% 
       # e_title(NULL, "Word frequencies") %>% 
       e_theme("walden")
   })

@@ -24,3 +24,4 @@ source("utils/ui-utils.R")
 
 source("modules/mod_count_icon.R")
 source("modules/mod_topics_graph.R")
+source("modules/mod_insights_charts.R")
