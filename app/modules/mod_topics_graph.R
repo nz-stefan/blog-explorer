@@ -25,7 +25,7 @@ topics_graph_ui <- function(id) {
       ),
       column(
         width = 5, 
-        echarts4rOutput(ns("topic_timeseries_plot"), height = "240px"),
+        echarts4rOutput(ns("topic_timeseries_plot"), height = "220px"),
         echarts4rOutput(ns("topic_wordcloud"), height = "260px")
       )
     )
@@ -84,7 +84,8 @@ topics_graph <- function(input, output, session, d_data_model) {
       e_band(ci_lower, height) %>% 
       e_tooltip(trigger = "axis") %>%
       e_legend(show = FALSE) %>%
-      e_title(NULL, "Expected Topic Proportion") %>% 
+      e_title(NULL, "Expected Topic Proportion", left = "center") %>%
+      e_y_axis(axisLabel = list(margin = 3)) %>% 
       e_theme("walden")    # also good: westeros, auritus, walden
   })
   
@@ -95,8 +96,8 @@ topics_graph <- function(input, output, session, d_data_model) {
     d_data_model()$d_top_terms %>% 
       filter(topic == input$graph_selected) %>% 
       e_charts() %>% 
-      e_cloud(term, beta, shape = "circle", sizeRange = c(10, 48), width = "90%", height = "90%", rotationRange = c(0, 0)) %>% 
-      # e_title(NULL, "Word frequencies") %>% 
+      e_cloud(term, beta, shape = "circle", sizeRange = c(10, 48), width = "90%", height = "70%", rotationRange = c(0, 0)) %>% 
+      e_title(subtext = "Word frequencies", left = "center") %>% 
       e_theme("walden")
   })
     
