@@ -64,6 +64,7 @@ insights_charts <- function(input, output, session, d_data_model) {
   
   output$plot_n_words <- renderEcharts4r({
     req(d_data_model())
+    print("plot_n_words")
 
     d_data_model()$d_avg_words %>%
       mutate(height = quant_75 - quant_25) %>% 

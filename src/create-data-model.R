@@ -204,18 +204,54 @@ d_nodes <-
     d_gamma_terms %>% filter(top_word) %>% select(topic, gamma),
     by  = c(id = "topic")
   ) %>% 
+  mutate(size = 2000 * gamma) %>%
+  select(id, label = term, size) %>% 
+  mutate(topic = id) %>% 
+  left_join(
+    d_top_terms %>% 
+      group_by(topic) %>% 
+      top_n(5, beta) %>% 
+      ungroup() %>% 
+      mutate(node_id = 1000 * (1:n())) %>% 
+      select(topic, term, beta, node_id),
+    by = "topic"
+  ) %>% 
   mutate(
-    size = 1000 * gamma,
-    font.size = 3 * size
-  ) %>%
-  select(id, label = term, size, font.size)
+    id = ifelse(label == term, id, node_id),
+    shape = ifelse(label == term, "dot", "square"),
+    color = ifelse(label == term, "#3fb1e3", "#888888"),
+    # font.color = ifelse(label == term, "#3fb1e3", "#888888"),
+    size = ifelse(label == term, size, 12),
+    font.size = 5 * size,
+    label = term
+  )
+
 
 # add additional properties to the graph edges
 d_edges <- 
   g_vis$edges %>% 
-  mutate(width = weight * 20)
+  mutate(width = weight * 20) %>% 
+  bind_rows(
+    d_nodes %>% 
+      filter(id > 100) %>% 
+      mutate(weight = 1, width = 1) %>% 
+      select(from = topic, to = id, weight, width)
+  )
 
-# visNetwork(nodes = d_nodes, edges = d_edges, height = "500px")
+# visNetwork(nodes = d_nodes, edges = d_edges, height = "500px") %>%
+#   # use straight edges to improve rendering performance
+#   visEdges(smooth = FALSE, color = list(opacity = 0.5)) %>%
+# 
+#   # configure layouting algorithm
+#   visPhysics(
+#     solver = "forceAtlas2Based",
+#     timestep = 0.5,
+#     minVelocity = 1,
+#     maxVelocity = 30,
+#     forceAtlas2Based = list(gravitationalConstant = -500, damping = 1),
+#     stabilization = list(iterations = 100, updateInterval = 10),
+#     adaptiveTimestep = TRUE
+#   )
 
 
 
