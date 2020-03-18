@@ -16,7 +16,7 @@
 topics_graph_ui <- function(id) {
   ns <- NS(id)
   
-  material_card(
+  # material_card(
     fluidRow(
       column(width = 12, echarts4rOutput(ns("topic_prevalence_plot"), height = "200px")),
       column(
@@ -42,7 +42,7 @@ topics_graph_ui <- function(id) {
         echarts4rOutput(ns("topic_wordcloud"), height = "260px")
       )
     )
-  )
+  # )
 }
 
 
@@ -86,7 +86,10 @@ topics_graph <- function(input, output, session, d_data_model) {
     req(d_data_model())
     
     visNetwork(
-      nodes = d_data_model()$d_nodes, 
+      nodes = 
+        d_data_model()$d_nodes %>% 
+        mutate(color.highlight.background = "firebrick") %>% 
+        rename(color.background = color), 
       edges = d_data_model()$d_edges
     ) %>%
       
@@ -179,10 +182,8 @@ topics_graph <- function(input, output, session, d_data_model) {
 
   # Topic prevalence plot ---------------------------------------------------
 
-  output$topic_prevalence_plot <- renderEcharts4r({
-
-    d_plot <- 
-      d_data_model()$d_gamma_terms %>% 
+  d_topic_prevalence <- reactive({
+    d_data_model()$d_gamma_terms %>% 
       filter(top_word) %>% 
       mutate(
         topic_name = paste("Topic", topic),
@@ -190,16 +191,20 @@ topics_graph <- function(input, output, session, d_data_model) {
         gamma = round(gamma, 4)
       )
     
+  })
+  
+  output$topic_prevalence_plot <- renderEcharts4r({
+
     if (! isTruthy(selected_topic())) {
       p <- 
-        d_plot %>% 
+        d_topic_prevalence() %>% 
         e_chart(x = topic_name) %>% 
         e_bar(gamma, name = "Topic prevalence gamma", stack = "grp", color = "#888888") %>% 
         e_title(subtext = "Topic prevalence", left = "center")
         
     } else {
       p <- 
-        d_plot %>% 
+        d_topic_prevalence() %>% 
         mutate(
           group = ifelse(topic == selected_topic(), "selected", "notselected")
         ) %>%
@@ -217,5 +222,14 @@ topics_graph <- function(input, output, session, d_data_model) {
       e_x_axis(splitLine = list(show = FALSE), show = FALSE) %>%
       e_y_axis(splitLine = list(show = FALSE), show = FALSE) %>% 
       e_theme("walden")    # also good: westeros, auritus, walden
-  })    
+  })  
+  
+  observeEvent(input$topic_prevalence_plot_clicked_row, {
+    
+    node_id <- d_topic_prevalence()$topic[input$topic_prevalence_plot_clicked_row]
+
+    visNetworkProxy(ns("graph")) %>% 
+      visFocus(node_id, scale = 0.1) %>% 
+      visSelectNodes(node_id)
+  })
 }  

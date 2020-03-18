@@ -8,6 +8,7 @@
 
 library(shiny)
 library(dplyr)
+library(tidyr)
 library(echarts4r)
 library(visNetwork)
 library(glue)
