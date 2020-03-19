@@ -146,13 +146,20 @@ topics_graph <- function(input, output, session, d_data_model) {
         filter(topic == selected_topic()) %>%
         
         # to plot the confidence envelope in echarts a lower and a height number is required
-        mutate(height = ci_upper - ci_lower) %>%
-        
+        mutate(
+          estimate = round(estimate, 4),
+          height = ci_upper - ci_lower
+        ) %>%
         # make chart
         e_charts(x = publication_date) %>%
         e_line(estimate, symbol = "none", name = "Expected Topic Proportion") %>%
         e_band(ci_lower, height) %>%
-        e_tooltip(trigger = "axis") %>%
+        e_tooltip(
+          trigger = "axis",
+          formatter = htmlwidgets::JS(
+            "function(params){return(params[0].value[0]+'<br />Expected Topic Proportion: '+params[0].value[1])}"
+          )
+        ) %>%
         e_legend(show = FALSE) %>%
         e_title(NULL, "Expected Topic Proportion", left = "center") %>%
         e_y_axis(axisLabel = list(margin = 3)) %>%
@@ -201,9 +208,9 @@ topics_graph <- function(input, output, session, d_data_model) {
         e_chart(x = topic_name) %>% 
         e_bar(gamma, name = "Topic prevalence gamma", stack = "grp", color = "#888888") %>% 
         e_title(subtext = "Topic prevalence", left = "center")
-        
+        # e_tooltip()
     } else {
-      p <- 
+      p <-
         d_topic_prevalence() %>% 
         mutate(
           group = ifelse(topic == selected_topic(), "selected", "notselected")
@@ -217,8 +224,12 @@ topics_graph <- function(input, output, session, d_data_model) {
     }
     
     p %>% 
+      e_tooltip(
+        formatter = htmlwidgets::JS(
+          "function(params){return(params.value[0]+'<br />Topic prevalence gamma: '+params.value[1])}"
+        )
+      ) %>% 
       e_legend(show = FALSE) %>%
-      e_tooltip(trigger = "axis") %>%
       e_x_axis(splitLine = list(show = FALSE), show = FALSE) %>%
       e_y_axis(splitLine = list(show = FALSE), show = FALSE) %>% 
       e_theme("walden")    # also good: westeros, auritus, walden

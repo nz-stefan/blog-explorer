@@ -77,13 +77,10 @@
             <ul class="nav navbar-nav navbar-right">
               <li><a href="#totop">Home</a></li>
               <li><a class="section-scroll" href="#data">Data</a></li>
+              <li><a class="section-scroll" href="#stats">Stats</a></li>
               <li><a class="section-scroll" href="#topics">Topics</a></li>
               <li><a class="section-scroll" href="#project">Project</a></li>
-              <!--<li><a class="section-scroll" href="#team">Team</a></li>
-              <li><a class="section-scroll" href="#pricing">Prices</a></li>
-              <li><a class="section-scroll" href="#news">News</a></li>
-              -->
-              <li><a class="section-scroll" href="#contact">Contact</a></li>
+              <!--li><a class="section-scroll" href="#contact">Contact</a></li-->
             </ul>
           </div>
         </div>
@@ -91,8 +88,8 @@
       <section class="home-section home-full-height bg-dark bg-gradient" id="home" data-background="assets/images/section-10.jpg">
         <div class="titan-caption">
           <div class="caption-content">
-            <div class="font-alt mb-30 titan-title-size-1">Hello &amp; welcome</div>
-            <div class="font-alt mb-40 titan-title-size-4">R Blogs Explorer</div><a class="section-scroll btn btn-border-w btn-round" href="#data">Learn More</a>
+            <div class="font-alt mb-30 titan-title-size-1">Topic Models to study R Blogs</div>
+            <div class="font-alt mb-40 titan-title-size-4">Blog Explorer</div><a class="section-scroll btn btn-border-w btn-round" href="#data">Learn More</a>
           </div>
         </div>
       </section>
@@ -125,11 +122,11 @@
           </div>
         </section>
         
-        <section class="module bg-dark-90">
+        <section class="module bg-dark-90" id="stats">
           <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Fun Facts</h2>
+                <h2 class="module-title font-alt">Summary Stats</h2>
                 <div class="module-subtitle font-serif">
                 </div>
               </div>
@@ -142,9 +139,12 @@
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Topics</h2>
+                <h2 class="module-title font-alt">Topic Model</h2>
                 <div class="module-subtitle font-serif">
-                  Explore topics...
+                  A Structural Topic Model was fitted on the corpus of 30+K blog articles. 
+                  The charts summarise the resulting 60 topics and their correlation between each other. 
+                  Structural Topic Models also allow to estimate the proportion of each document about a topic
+                  based on document-specific covariates, in this case the publication date of an article.
                 </div>
               </div>
             </div>
@@ -162,130 +162,85 @@
             </div>
           </div>
         </section>
-        
-        <section class="module bg-dark-60" data-background="assets/images/section-3.jpg">
+
+        <section class="module-small bg-dark" id="project">
           <div class="container">
             <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Scoreboard</h2>
-                <div class="module-subtitle font-serif"></div>
-              </div>
-            </div>
-            <div class="row multi-columns-row">
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="count-item mb-sm-40">
-                  <div class="count-icon"><span class="icon-wallet"></span></div>
-                  <h3 class="count-to font-alt" data-countto="6543"></h3>
-                  <h5 class="count-title font-serif">Dollars raised for charity</h5>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="count-item mb-sm-40">
-                  <div class="count-icon"><span class="icon-wine"></span></div>
-                  <h3 class="count-to font-alt" data-countto="8"></h3>
-                  <h5 class="count-title font-serif">Cups of wine consumed</h5>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="count-item mb-sm-40">
-                  <div class="count-icon"><span class="icon-camera"></span></div>
-                  <h3 class="count-to font-alt" data-countto="184"></h3>
-                  <h5 class="count-title font-serif">Photographs taken</h5>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="count-item mb-sm-40">
-                  <div class="count-icon"><span class="icon-map-pin"></span></div>
-                  <h3 class="count-to font-alt" data-countto="32"></h3>
-                  <h5 class="count-title font-serif">Locations covered</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section class="module" id="project">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
+                <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">Project</h2>
-                <div class="module-subtitle font-serif">Some interesting project description goes here...</div>
+                <div class="module-subtitle font-serif">
+                  Standing on the shoulders of giants...
+                </div>
               </div>
             </div>
-            <div class="row mt-40">
-              <div class="col-sm-6 col-sm-offset-3 align-center">
-                <p>Everyone realizes why a new common language would be desirable: one could refuse to pay expensive translators. To achieve this, it would be necessary to have uniform grammar, pronunciation and more common words.</p>
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Inspiration</h5>
+                  <p>
+                    <a href="https://juliasilge.com/">Julia Silge's</a> fantastic blog and her 
+                    <a href="https://juliasilge.com/blog/evaluating-stm/">article on STM</a> are the foundation
+                    of this project.
+                  </p>
+                  <p>
+                    The <a href="https://me.eui.eu/andrea-de-angelis/blog/structural-topic-models-to-study-political-text-an-application-to-the-five-star-movements-blog/">blog article</a> of Andrea De Angelis gave inspiration to exploit meta information in topic models.
+                  </p>
+                  <p>
+                    The idea of a topic correlation graph came from the <a href="https://cran.r-project.org/web/packages/stminsights/vignettes/intro.html">vignette</a> of the <tt>stminsights</tt> package. 
+                  </p>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Visualisations</h5>
+                  <p>The beautiful <a href="https://echarts.apache.org/en">ECHARTS</a> engine is behind all charts used in this project. The engine is very comprehensive, supports many chart types and comes with a selection of stylish themes. John Coene developed an easy to use <a href="https://github.com/JohnCoene/echarts4r">R wrapper</a>  complete with Shiny support, documentation and impressive examples.
+                  </p>
+                  <p>
+                    The network visualations are powered by DataStorm's <a href="https://datastorm-open.github.io/visNetwork/">visNetwork</a> package.
+                  </p>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Key Technology</h5>
+                  <p>
+                    The topic models are generated using the <a href="https://github.com/bstewart/stm">stm</a> package. Papers on the topic can be found <a href="https://www.structuraltopicmodel.com/">here</a>. Some code from the <a href="https://github.com/mikajoh/tidystm">tidystm</a> package was used to transform STM outputs into tidy format.
+                  </p>
+                  <p>
+                    The data was scraped using the super convenient <a href="https://github.com/tidyverse/rvest">rvest</a> package.
+                  </p>
+                  <p>
+                    The development environment of this project is a <a href="https://hub.docker.com/r/rocker/rstudio/">Rocker</a> based <a href="https://www.docker.com/">Docker</a> container running the Open Source version of <a href="https://rstudio.com/products/rstudio/#rstudio-server">RStudio Server</a>.
+                  </p>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Themes & Assets</h5>
+                  <p>
+                    The amazing <a href="https://markup.themewagon.com/titan/index.html">Titan</a> HTML theme is developed by <a href="https://themewagon.com/author/themewagon/">ThemeWagon</a> and can be downloaded for free!
+                  </p>
+                  <p>
+                    The hero image on the top of this application was created by <a href="https://unsplash.com/@callumlwale">Callum Wale</a> and made available at <a href="https://unsplash.com/">Unsplash</a> for free.
+                  </p>
+                  <p>
+                    I used <a href="https://shiny.rstudio.com/articles/templates.html">HTML templates</a> to create a unique look for this <a href="https://shiny.rstudio.com/">Shiny application</a>. The code is structured using <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>. 
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </section>
-        <div class="module-small bg-dark" id="contact">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">About Titan</h5>
-                  <p>The languages only differ in their grammar, their pronunciation and their most common words.</p>
-                  <p>Phone: +1 234 567 89 10</p>Fax: +1 234 567 89 10
-                  <p>Email:<a href="#">somecompany@example.com</a></p>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Recent Comments</h5>
-                  <ul class="icon-list">
-                    <li>Maria on <a href="#">Designer Desk Essentials</a></li>
-                    <li>John on <a href="#">Realistic Business Card Mockup</a></li>
-                    <li>Andy on <a href="#">Eco bag Mockup</a></li>
-                    <li>Jack on <a href="#">Bottle Mockup</a></li>
-                    <li>Mark on <a href="#">Our trip to the Alps</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Blog Categories</h5>
-                  <ul class="icon-list">
-                    <li><a href="#">Photography - 7</a></li>
-                    <li><a href="#">Web Design - 3</a></li>
-                    <li><a href="#">Illustration - 12</a></li>
-                    <li><a href="#">Marketing - 1</a></li>
-                    <li><a href="#">Wordpress - 16</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Popular Posts</h5>
-                  <ul class="widget-posts">
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-1.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Designer Desk Essentials</a></div>
-                        <div class="widget-posts-meta">23 january</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="assets/images/rp-2.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Realistic Business Card Mockup</a></div>
-                        <div class="widget-posts-meta">15 February</div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
         <hr class="divider-d">
         <footer class="footer bg-dark">
           <div class="container">
             <div class="row">
               <div class="col-sm-6">
-                <p class="copyright font-alt">&copy; 2017&nbsp;<a href="index.html">TitaN</a>, All Rights Reserved</p>
+                <p class="copyright font-alt">Developed by Stefan Schliebs</p>
               </div>
               <div class="col-sm-6">
-                <div class="footer-social-links"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-dribbble"></i></a><a href="#"><i class="fa fa-skype"></i></a>
+                <div class="footer-social-links"><a href="https://www.linkedin.com/in/sschliebs/"><i class="fa fa-linkedin"></i></a><a href="https://github.com/nz-stefan/"><i class="fa fa-github"></i></a>
                 </div>
               </div>
             </div>
@@ -293,7 +248,6 @@
         </footer>
       </div>
       <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
-      <!--script async="" defer="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK2Axt8xiFYMBMDwwG1XzBQvEbYpzCvFU"></script-->
     </main>
     <!--  
     JavaScripts
@@ -310,7 +264,6 @@
     <script src="assets/lib/smoothscroll.js"></script>
     <script src="assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
     <script src="assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
-    <!--script async="" defer="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK2Axt8xiFYMBMDwwG1XzBQvEbYpzCvFU"></script-->
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/main.js"></script>
   </body>
