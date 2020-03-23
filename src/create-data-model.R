@@ -164,12 +164,20 @@ d_beta <- tidy(m_topic)
 # compute top terms per topic
 d_top_terms <- 
   d_beta %>%
-  arrange(beta) %>%
+  # lemmatise for the top terms, it makes a cleaner term frequency wordcloud 
+  mutate(term_lemmatised = textstem::lemmatize_strings(term)) %>% 
+  
+  # select only one of the terms that map to the same lemmatised term
+  group_by(topic, term_lemmatised) %>% 
+  summarise(beta = max(beta)) %>% 
+  
+  # select the top words by topic
   group_by(topic) %>%
   top_n(100, beta) %>%
   mutate(top_word = beta == max(beta)) %>% 
   arrange(topic) %>%
-  ungroup()
+  ungroup() %>% 
+  rename(term = term_lemmatised)
 
 # compute gamma marix (probabilities that each document is generated from each topic)
 d_gamma <- tidy(m_topic, matrix = "gamma", document_names = rownames(d_sparse))
@@ -222,7 +230,7 @@ d_nodes <-
     color = ifelse(label == term, "#3fb1e3", "#888888"),
     # font.color = ifelse(label == term, "#3fb1e3", "#888888"),
     size = ifelse(label == term, size, 12),
-    font.size = 5 * size,
+    font.size = 6 * size,
     label = term
   )
 

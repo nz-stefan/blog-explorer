@@ -18,9 +18,20 @@ topics_graph_ui <- function(id) {
   
   # material_card(
     fluidRow(
-      column(width = 12, echarts4rOutput(ns("topic_prevalence_plot"), height = "200px")),
+      # column(width = 12, echarts4rOutput(ns("topic_prevalence_plot"), height = "200px")),
       column(
-        width = 7,
+        width = 4, 
+        echarts4rOutput(ns("topic_prevalence_plot"), height = "200px"),
+        echarts4rOutput(ns("topic_timeseries_plot"), height = "200px"),
+        echarts4rOutput(ns("topic_wordcloud"), height = "220px"),
+        style = "background-color: rgba(34, 34, 34, 0.9)"
+      ),
+      column(
+        width = 8,
+        div(
+          uiOutput(ns("headline_section")),
+          style = "height: 90px"
+        ),
         div(
           class = "graph-loading-bar",
           style = "margin-top: 180px",
@@ -32,14 +43,10 @@ topics_graph_ui <- function(id) {
           )
         ),
         div(
-          visNetworkOutput(ns("graph"), width = "100%", height = "450px"),
+          visNetworkOutput(ns("graph"), width = "100%", height = "500px"),
           style = "margin-top: -180px"
-        )
-      ),
-      column(
-        width = 5, 
-        echarts4rOutput(ns("topic_timeseries_plot"), height = "220px"),
-        echarts4rOutput(ns("topic_wordcloud"), height = "260px")
+        ),
+        style = "background-color: #eee"
       )
     )
   # )
@@ -51,8 +58,38 @@ topics_graph_ui <- function(id) {
 
 topics_graph <- function(input, output, session, d_data_model) {
   ns <- session$ns
-  
 
+
+  # Headline section --------------------------------------------------------
+
+  output$headline_section <- renderUI({
+    if (! isTruthy(selected_topic())) {
+      h4("Click on a node in the graph!", class = "font-alt", style = "text-align: center")
+    } else {
+      freq_terms <- d_data_model()$d_top_terms %>% 
+        filter(topic == selected_topic()) %>% 
+        top_n(5, beta) %>% 
+        arrange(desc(beta)) %>% 
+        pull(term) %>% 
+        paste(collapse = ", ")
+      
+      topic_rank <- d_topic_prevalence() %>% 
+        mutate(rank = rank(desc(gamma), ties.method = "first")) %>% 
+        filter(topic == selected_topic()) %>% 
+        pull(rank)
+      
+      tagList(
+        h4(paste("Topic", selected_topic()), class = "font-alt"),
+        p(
+          "Most frequent terms: ", freq_terms, br(),
+          "Overall topic rank: ", topic_rank, "/", d_data_model()$n_topics
+        )
+      )
+    }
+  })  
+
+  
+  
   # Topic correlation network -----------------------------------------------
 
   # javascript function to control progress bar during network layouting
@@ -88,11 +125,18 @@ topics_graph <- function(input, output, session, d_data_model) {
     visNetwork(
       nodes = 
         d_data_model()$d_nodes %>% 
-        mutate(color.highlight.background = "firebrick") %>% 
-        rename(color.background = color), 
+        mutate(
+          color.highlight.background = "firebrick", 
+          color.highlight.border = "firebrick",
+          color.border = color,
+          font.color.highlight = "firebrick"
+        ) %>%
+        rename(color.background = color),
       edges = d_data_model()$d_edges
     ) %>%
       
+      visNodes(chosen = list(label = htmlwidgets::JS("function(values, id, selected, hovering){values.color='firebrick'}"))) %>% 
+
       # use straight edges to improve rendering performance
       visEdges(smooth = FALSE, color = list(opacity = 0.5)) %>%
       
@@ -117,10 +161,6 @@ topics_graph <- function(input, output, session, d_data_model) {
       )
   })
   
-
-  
-  # Topic details panel -----------------------------------------------------
-
   # extract the node that was clicked on from the Shiny input
   selected_topic <- reactive({
     if (! isTruthy(input$graph_selected)) return(NULL)
@@ -130,6 +170,9 @@ topics_graph <- function(input, output, session, d_data_model) {
       pull(topic)
   })
   
+  
+  
+  # Topic details panel -----------------------------------------------------
 
   # plot the topic proportions over time
   output$topic_timeseries_plot <- renderEcharts4r({
@@ -153,7 +196,7 @@ topics_graph <- function(input, output, session, d_data_model) {
         # make chart
         e_charts(x = publication_date) %>%
         e_line(estimate, symbol = "none", name = "Expected Topic Proportion") %>%
-        e_band(ci_lower, height) %>%
+        e_band(ci_lower, height, color = c("#888888", "#888888")) %>%
         e_tooltip(
           trigger = "axis",
           formatter = htmlwidgets::JS(
@@ -162,7 +205,13 @@ topics_graph <- function(input, output, session, d_data_model) {
         ) %>%
         e_legend(show = FALSE) %>%
         e_title(NULL, "Expected Topic Proportion", left = "center") %>%
-        e_y_axis(axisLabel = list(margin = 3)) %>%
+        e_x_axis(splitLine = list(show = FALSE)) %>%
+        e_y_axis(
+          splitLine = list(show = FALSE), 
+          formatter = e_axis_formatter("percent", digits = 0), 
+          min = 0, max = 0.06, splitNumber = 4,
+          axisLabel = list(margin = 3)
+        ) %>% 
         e_theme("walden")    # also good: westeros, auritus, walden
     }
   })

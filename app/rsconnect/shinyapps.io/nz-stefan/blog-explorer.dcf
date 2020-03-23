@@ -5,8 +5,8 @@ account: nz-stefan
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1944795
-bundleId: 2897420
+bundleId: 2905097
 url: https://nz-stefan.shinyapps.io/blog-explorer/
-when: 1584612271.1461
+when: 1584788771.46864
 asMultiple: FALSE
 asStatic: FALSE
