@@ -100,8 +100,7 @@
               <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">Data</h2>
                 <div class="module-subtitle font-serif">
-                  Blog articles collected from R-Blogger archives over the period from Jan 2010 until today. 
-                  Data is refreshed weekly from R-Blogger RSS feeds. {{ last_refresh }}
+                  {{ last_refresh }}
                 </div>
               </div>
             </div>
@@ -141,10 +140,7 @@
               <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">Topic Model</h2>
                 <div class="module-subtitle font-serif">
-                  A Structural Topic Model was fitted on the corpus of 30+K blog articles. 
-                  The charts summarise the resulting 60 topics and their correlation between each other. 
-                  Structural Topic Models also allow to estimate the proportion of each document about a topic
-                  based on document-specific covariates, in this case the publication date of an article.
+                  Click on the graph to explore topics
                 </div>
               </div>
             </div>
@@ -162,8 +158,111 @@
             </div>
           </div>
         </section>
+        
+        <section class="module-small bg-dark-90">
+          <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">More topic stuff</h2>
+                <div class="module-subtitle font-serif">
+                  To be completed...
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <section class="module-small bg-dark" id="project">
+        
+        <section class="module-small" id="project">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <h2 class="module-title font-alt">Project</h2>
+                <div class="module-subtitle font-serif">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8">
+                <div class="post">
+                  <div class="post-header font-alt">
+                    <h1 class="post-title">Analysing 10+ Years of R Blogs</h1>
+                  </div>
+                  <div class="post-entry">
+                    <p>
+                      <a href="https://juliasilge.com/">Julia Silge's</a> fantastic blog and her 
+                      <a href="https://juliasilge.com/blog/evaluating-stm/">article on STM</a> are the foundation
+                      of this project.
+                    </p>
+
+                    <h4 class="font-alt">Data</h4>
+                    <p>Blog articles collected from R-Blogger archives over the period from Jan 2010 until today. 
+                  Data is refreshed weekly from R-Blogger RSS feeds. The data was scraped using the super convenient <a href="https://github.com/tidyverse/rvest">rvest</a> package.</p>
+                    
+                    <h4 class="font-alt">Topic Model</h4>
+                    <p>
+                      A Structural Topic Model was fitted on the corpus of 30+K blog articles. 
+                      The charts summarise the resulting 60 topics and their correlation between each other. 
+                      Structural Topic Models also allow to estimate the proportion of each document about a topic
+                      based on document-specific covariates, in this case the publication date of an article.
+                    </p>
+                    
+                    <p>
+                      The <a href="https://me.eui.eu/andrea-de-angelis/blog/structural-topic-models-to-study-political-text-an-application-to-the-five-star-movements-blog/">blog article</a> of Andrea De Angelis gave inspiration to exploit meta information in topic models.
+                    </p>
+                    <p>
+                      The idea of a topic correlation graph came from the <a href="https://cran.r-project.org/web/packages/stminsights/vignettes/intro.html">vignette</a> of the <tt>stminsights</tt> package. 
+                    </p>
+                    <p>
+                      The topic models are generated using the <a href="https://github.com/bstewart/stm">stm</a> package. Papers on the topic can be found <a href="https://www.structuraltopicmodel.com/">here</a>. Some code from the <a href="https://github.com/mikajoh/tidystm">tidystm</a> package was used to transform STM outputs into tidy format.
+                    </p>
+                    
+                    <h4 class="font-alt">Application</h4>
+                    <p>
+                      I used <a href="https://shiny.rstudio.com/articles/templates.html">HTML templates</a> to create a unique look for this <a href="https://shiny.rstudio.com/">Shiny application</a>. The code is structured using <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>. 
+                    </p>
+
+                    <h4 class="font-alt">Deployment</h4>
+                    <p>
+                      The development environment of this project is a <a href="https://hub.docker.com/r/rocker/rstudio/">Rocker</a> based <a href="https://www.docker.com/">Docker</a> container running the Open Source version of <a href="https://rstudio.com/products/rstudio/#rstudio-server">RStudio Server</a>.
+                    </p>
+                    
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Themes & Assets</h5>
+                  <p>
+                    The amazing <a href="https://markup.themewagon.com/titan/index.html">Titan</a> HTML theme is developed by <a href="https://themewagon.com/author/themewagon/">ThemeWagon</a> and can be downloaded for free!
+                  </p>
+                  <p>
+                    The hero image on the top of this application was created by <a href="https://unsplash.com/@callumlwale">Callum Wale</a> and made available at <a href="https://unsplash.com/">Unsplash</a> for free.
+                  </p>
+                </div>
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Visualisations</h5>
+                  <p>
+                    The beautiful <a href="https://echarts.apache.org/en">ECHARTS</a> engine is behind all charts used in this project. The engine is very comprehensive, supports many chart types and comes with a selection of stylish themes. John Coene developed an easy to use <a href="https://github.com/JohnCoene/echarts4r">R wrapper</a>  complete with Shiny support, documentation and impressive examples.
+                  </p>
+                  <p>
+                    The network visualations are powered by DataStorm's <a href="https://datastorm-open.github.io/visNetwork/">visNetwork</a> package.
+                  </p>
+                </div>
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Code</h5>
+                  <p>Code available on Github</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!--
+        <section class="module-small bg-dark">
           <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
@@ -231,13 +330,13 @@
             </div>
           </div>
         </section>
-        
+        -->
         <hr class="divider-d">
         <footer class="footer bg-dark">
           <div class="container">
             <div class="row">
               <div class="col-sm-6">
-                <p class="copyright font-alt">Developed by Stefan Schliebs</p>
+                <p class="copyright font-alt">Stefan Schliebs</p>
               </div>
               <div class="col-sm-6">
                 <div class="footer-social-links"><a href="https://www.linkedin.com/in/sschliebs/"><i class="fa fa-linkedin"></i></a><a href="https://github.com/nz-stefan/"><i class="fa fa-github"></i></a>
