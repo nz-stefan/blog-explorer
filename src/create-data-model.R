@@ -147,8 +147,8 @@ d_day_of_week <-
 
 # train model
 loginfo("Training model with %d topics", NUM_TOPICS)
-# m_topic <- stm(d_sparse, K = NUM_TOPICS, verbose = TRUE, max.em.its = 75)
-m_topic <- readRDS(F_TOPIC_MODEL)
+m_topic <- stm(d_sparse, K = NUM_TOPICS, verbose = TRUE, max.em.its = 75)
+# m_topic <- readRDS(F_TOPIC_MODEL)
 
 # export to disk
 loginfo("Exporting topic model to '%s'", F_TOPIC_MODEL)
