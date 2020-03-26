@@ -1,0 +1,20 @@
+FROM debian:testing
+
+# install system dependencies
+RUN apt-get update && \
+apt-get install -y libcurl4-openssl-dev libssl-dev python curl unzip
+
+# install AWS CLI
+WORKDIR /root
+RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+RUN unzip awscli-bundle.zip
+RUN ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
+# copy AWS credentials
+RUN mkdir /root/.aws
+COPY .aws-credentials /root/.aws/credentials
+
+# copy bash file
+COPY download-feed.sh /root/download-feed.sh
+
+CMD ["./download-feed.sh"]
