@@ -115,13 +115,14 @@ topics_graph <- function(input, output, session, d_data_model) {
       "  document.getElementById('{ns('loading-text')}').innerHTML = 'loading - 100%';",
       "  document.getElementById('graph{ns('graph')}').chart.stopSimulation();",
       "  document.getElementById('{ns('loading-bar')}').style.visibility = 'hidden';",
+      "  Shiny.onInputChange('{ns('graph_stabilised')}', 1);",
       "}}"
     )
   }
   
   output$graph <- renderVisNetwork({
     req(d_data_model())
-    
+
     visNetwork(
       nodes = 
         d_data_model()$d_nodes %>% 
@@ -159,6 +160,16 @@ topics_graph <- function(input, output, session, d_data_model) {
         stabilizationProgress = progress_js_func(),
         stabilizationIterationsDone = stabilised_js_func()
       )
+  })
+  
+  observeEvent(input$graph_stabilised, {
+    req(input$graph_stabilised)
+    
+    # select a random top 10 topic to pre-select when the network graph finished building
+    node_id <- d_topic_prevalence()$topic[sample(1:10, 1)]
+    visNetworkProxy(ns("graph")) %>% 
+      visFocus(node_id, scale = 0.075) %>% 
+      visSelectNodes(node_id)
   })
   
   # extract the node that was clicked on from the Shiny input

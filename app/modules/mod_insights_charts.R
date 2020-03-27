@@ -74,7 +74,7 @@ insights_charts <- function(input, output, session, d_data_model) {
         color = c("#888888", "#888888"), symbol = c("none", "none")
       ) %>% 
       e_legend(show = FALSE) %>%
-      e_tooltip(trigger = "axis") %>%
+      e_tooltip(trigger = "axis", formatter = e_tooltip_pointer_formatter("decimal", 0)) %>%
       e_title(subtext = "# unique non-stop words per blog", left = "center") %>% 
       e_x_axis(splitLine = list(show = FALSE)) %>%
       e_y_axis(splitLine = list(show = FALSE), show = FALSE) %>%
