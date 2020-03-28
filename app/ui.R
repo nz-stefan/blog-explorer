@@ -14,7 +14,8 @@ htmlTemplate(
   page_counter = count_icon_ui("page_counter", icon = "icon-book-open", icon_text = "Equivalent Book Pages"),
   insights_charts = insights_charts_ui("insights_charts"),
   last_refresh = uiOutput("last_refresh"),
-  topics_graph = topics_graph_ui("topics_graph")
+  topics_graph = topics_graph_ui("topics_graph"),
+  topics_table = topics_table_ui("topics_table")
 
   # box_packages_new_month = pretty_value_box_ui("packages-new-month", icon_name = "cubes"),
   # box_packages_updated_month = pretty_value_box_ui("packages-updated-month", background_color = "#7ab885", icon_name = "cubes"),

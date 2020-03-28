@@ -163,12 +163,15 @@
           <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">More topic stuff</h2>
+                <h2 class="module-title font-alt">Topic Top Terms</h2>
                 <div class="module-subtitle font-serif">
-                  To be completed...
+                  
                 </div>
               </div>
             </div>
+            
+            {{ topics_table }}
+
           </div>
         </section>
 
@@ -192,41 +195,64 @@
                   </div>
                   <div class="post-entry">
                     <p>
-                      <a href="https://juliasilge.com/">Julia Silge's</a> fantastic blog and her 
-                      <a href="https://juliasilge.com/blog/evaluating-stm/">article on STM</a> are the foundation
-                      of this project.
+                      An article by <a href="https://juliasilge.com/">Julia Silge</a> about <a href="https://juliasilge.com/blog/evaluating-stm/">Structural Topic Models</a> gave the inspiration for this project. I have often struggled to extract meaningful information from free text documents but Julia's results looked very convincing. Additionally the chosen topic model algorithm can take advantage of additional meta information associated for each document. The <a href="https://me.eui.eu/andrea-de-angelis/blog/structural-topic-models-to-study-political-text-an-application-to-the-five-star-movements-blog/">blog article</a> by Andrea De Angelis explained how to exploit publication dates of documents and show topic trends over time. After some digging I found the <a href="https://cran.r-project.org/web/packages/stminsights/vignettes/intro.html">vignette</a> of the <a href="https://github.com/cschwem2er/stminsights">stminsights</a> package which provides functionality to extract topic correlation graphs from the trained structural topic model. All these resources put enough ideas in my head to create this app.
+                    </p>
+                    
+                    <h4 class="font-alt">Data</h4>
+                    <p>
+                      I am a fond reader of blog articles published on R-Bloggers.com. It is an aggregator for blogs about R and has been around for more than a decade. I thought it would be very interesting to see how the R scene has developed over the last 10 years. What topics were talked about in the past, what are people writing about today? Would we see the rise of Shiny, the tidyverse, Rmarkdown, CRAN releases, conference announcements?
+
+I scraped the blog data from R-Bloggers from their public archives using the super convenient <a href="https://github.com/tidyverse/rvest">rvest</a> package. The process is split into three phases to allow me later to change my mind about the particular processing of articles. 
+                    </p>
+                    
+                    <ol>
+                      <li>Obtain a list of links to articles published on R-Bloggers</li>
+                      <li>Download each article from the link collection</li>
+                      <li> parse each document and combined them into a single dataframe</li>
+                    </ol>
+
+                    <p>
+                      For each document I also collected meta information such as blog title, publication date, author and URLs to the original blog. In total I collected more than 30,000 articles published as early as Jan 2010.
+                    </p>
+                    <p>
+                      For the ongoing data refresh I download the R-Blogger RSS feeds every day using a script running in a Docker container on AWS on a daily schedule. The RSS feed is a XML file that contains the latest 25 articles published on the website. At the end of each month a second script in a second container combines the articles in all collected feeds with the 30,000 scraped articles and refreshes the topic model behind this application. 
                     </p>
 
-                    <h4 class="font-alt">Data</h4>
-                    <p>Blog articles collected from R-Blogger archives over the period from Jan 2010 until today. 
-                  Data is refreshed weekly from R-Blogger RSS feeds. The data was scraped using the super convenient <a href="https://github.com/tidyverse/rvest">rvest</a> package.</p>
-                    
                     <h4 class="font-alt">Topic Model</h4>
                     <p>
-                      A Structural Topic Model was fitted on the corpus of 30+K blog articles. 
-                      The charts summarise the resulting 60 topics and their correlation between each other. 
-                      Structural Topic Models also allow to estimate the proportion of each document about a topic
-                      based on document-specific covariates, in this case the publication date of an article.
+                      I followed Julia Silge's methodology to determine the optimal number of topics. The process involved trainined several models with varying number of topics and then infer a reasonable topic number from a variety of diagnostic plots. The training took hours to complete, I let the machine run over night despite parallelising the computation.
                     </p>
                     
-                    <p>
-                      The <a href="https://me.eui.eu/andrea-de-angelis/blog/structural-topic-models-to-study-political-text-an-application-to-the-five-star-movements-blog/">blog article</a> of Andrea De Angelis gave inspiration to exploit meta information in topic models.
-                    </p>
-                    <p>
-                      The idea of a topic correlation graph came from the <a href="https://cran.r-project.org/web/packages/stminsights/vignettes/intro.html">vignette</a> of the <tt>stminsights</tt> package. 
-                    </p>
                     <p>
                       The topic models are generated using the <a href="https://github.com/bstewart/stm">stm</a> package. Papers on the topic can be found <a href="https://www.structuraltopicmodel.com/">here</a>. Some code from the <a href="https://github.com/mikajoh/tidystm">tidystm</a> package was used to transform STM outputs into tidy format.
                     </p>
+
+                    <h4 class="font-alt">Did it work?</h4>
+                    <p>
+                      So did it actually work? Did the topic model identify relevant R trends? I think it did. Here are the results for the topics about (deep) machine learning, the rise of the tidyverse (<tt>dplyr</tt>), the popularity of Shiny and the interest about CRAN releases. Pretty good for an unsupervised method. Click on the image to enlarge.
+                    </p>
                     
+                    <a href="assets/images/topic-model-results.png">
+                      <img src="assets/images/topic-model-results.png" widh="100%" />
+                    </a>
+                    
+
                     <h4 class="font-alt">Application</h4>
                     <p>
-                      I used <a href="https://shiny.rstudio.com/articles/templates.html">HTML templates</a> to create a unique look for this <a href="https://shiny.rstudio.com/">Shiny application</a>. The code is structured using <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>. 
+                      I like beautiful data products and so I used <a href="https://shiny.rstudio.com/articles/templates.html">HTML templates</a> to create a unique look for this <a href="https://shiny.rstudio.com/">Shiny application</a>. The template is called <a href="https://markup.themewagon.com/titan/index.html">Titan</a> and is freely available. There was a bit more JavaScript foo necessary for the network visualisation.
                     </p>
-
+                    
+                    <p>
+                      The code is structured using <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>. 
+                    </p>
+                    
                     <h4 class="font-alt">Deployment</h4>
                     <p>
-                      The development environment of this project is a <a href="https://hub.docker.com/r/rocker/rstudio/">Rocker</a> based <a href="https://www.docker.com/">Docker</a> container running the Open Source version of <a href="https://rstudio.com/products/rstudio/#rstudio-server">RStudio Server</a>.
+                      The development environment of this project is a <a href="https://hub.docker.com/r/rocker/rstudio/">Rocker</a> based <a href="https://www.docker.com/">Docker</a> container running the Open Source version of <a href="https://rstudio.com/products/rstudio/#rstudio-server">RStudio Server</a>. Docker allows to control all aspects of the development environment, i.e. operating system, system packages and R version. The versions of R packages are tracked using the <a href="https://github.com/rstudio/renv">renv</a> package. This setup intends to assure reproducibility of this app.
+                    </p>
+                    
+                    <p>
+                      All code is on github and also available as a public RStudio Cloud project.
                     </p>
                     
                   </div>
@@ -237,16 +263,16 @@
                 <div class="widget">
                   <h5 class="widget-title font-alt">Themes & Assets</h5>
                   <p>
-                    The amazing <a href="https://markup.themewagon.com/titan/index.html">Titan</a> HTML theme is developed by <a href="https://themewagon.com/author/themewagon/">ThemeWagon</a> and can be downloaded for free!
+                    The amazing theme used in this application is called <a href="https://markup.themewagon.com/titan/index.html">Titan</a> and is developed by <a href="https://themewagon.com/author/themewagon/">ThemeWagon</a>. It can be downloaded for free!
                   </p>
                   <p>
                     The hero image on the top of this application was created by <a href="https://unsplash.com/@callumlwale">Callum Wale</a> and made available at <a href="https://unsplash.com/">Unsplash</a> for free.
                   </p>
                 </div>
                 <div class="widget">
-                  <h5 class="widget-title font-alt">Visualisations</h5>
+                  <h5 class="widget-title font-alt">Charts & Graphs</h5>
                   <p>
-                    The beautiful <a href="https://echarts.apache.org/en">ECHARTS</a> engine is behind all charts used in this project. The engine is very comprehensive, supports many chart types and comes with a selection of stylish themes. John Coene developed an easy to use <a href="https://github.com/JohnCoene/echarts4r">R wrapper</a>  complete with Shiny support, documentation and impressive examples.
+                    The beautiful <a href="https://echarts.apache.org/en">ECHARTS</a> engine is behind all charts used in this project. The engine is very comprehensive, supports many chart types and comes with a selection of stylish themes. John Coene developed an easy to use <a href="https://github.com/JohnCoene/echarts4r">R wrapper</a> complete with Shiny support, documentation and impressive examples.
                   </p>
                   <p>
                     The network visualations are powered by DataStorm's <a href="https://datastorm-open.github.io/visNetwork/">visNetwork</a> package.
@@ -260,83 +286,33 @@
             </div>
           </div>
         </section>
-
-        <!--
+        
         <section class="module-small bg-dark">
           <div class="container">
             <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Project</h2>
-                <div class="module-subtitle font-serif">
-                  Standing on the shoulders of giants...
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-3">
+              <div class="col-sm-6">
                 <div class="widget">
-                  <h5 class="widget-title font-alt">Inspiration</h5>
+                  <h5 class="widget-title font-alt">Developed By</h5>
+                  <h5>Stefan Schliebs</h5>
                   <p>
-                    <a href="https://juliasilge.com/">Julia Silge's</a> fantastic blog and her 
-                    <a href="https://juliasilge.com/blog/evaluating-stm/">article on STM</a> are the foundation
-                    of this project.
-                  </p>
-                  <p>
-                    The <a href="https://me.eui.eu/andrea-de-angelis/blog/structural-topic-models-to-study-political-text-an-application-to-the-five-star-movements-blog/">blog article</a> of Andrea De Angelis gave inspiration to exploit meta information in topic models.
-                  </p>
-                  <p>
-                    The idea of a topic correlation graph came from the <a href="https://cran.r-project.org/web/packages/stminsights/vignettes/intro.html">vignette</a> of the <tt>stminsights</tt> package. 
+                    <a href="https://www.linkedin.com/in/sschliebs/"><i class="fa fa-linkedin" style="font-size:20px; padding-right:25px"></i></a>
+                    <a href="https://github.com/nz-stefan/"><i class="fa fa-github" style="font-size:20px; padding-right:25px"></i></a>
                   </p>
                 </div>
               </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Visualisations</h5>
-                  <p>The beautiful <a href="https://echarts.apache.org/en">ECHARTS</a> engine is behind all charts used in this project. The engine is very comprehensive, supports many chart types and comes with a selection of stylish themes. John Coene developed an easy to use <a href="https://github.com/JohnCoene/echarts4r">R wrapper</a>  complete with Shiny support, documentation and impressive examples.
-                  </p>
-                  <p>
-                    The network visualations are powered by DataStorm's <a href="https://datastorm-open.github.io/visNetwork/">visNetwork</a> package.
-                  </p>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Key Technology</h5>
-                  <p>
-                    The topic models are generated using the <a href="https://github.com/bstewart/stm">stm</a> package. Papers on the topic can be found <a href="https://www.structuraltopicmodel.com/">here</a>. Some code from the <a href="https://github.com/mikajoh/tidystm">tidystm</a> package was used to transform STM outputs into tidy format.
-                  </p>
-                  <p>
-                    The data was scraped using the super convenient <a href="https://github.com/tidyverse/rvest">rvest</a> package.
-                  </p>
-                  <p>
-                    The development environment of this project is a <a href="https://hub.docker.com/r/rocker/rstudio/">Rocker</a> based <a href="https://www.docker.com/">Docker</a> container running the Open Source version of <a href="https://rstudio.com/products/rstudio/#rstudio-server">RStudio Server</a>.
-                  </p>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Themes & Assets</h5>
-                  <p>
-                    The amazing <a href="https://markup.themewagon.com/titan/index.html">Titan</a> HTML theme is developed by <a href="https://themewagon.com/author/themewagon/">ThemeWagon</a> and can be downloaded for free!
-                  </p>
-                  <p>
-                    The hero image on the top of this application was created by <a href="https://unsplash.com/@callumlwale">Callum Wale</a> and made available at <a href="https://unsplash.com/">Unsplash</a> for free.
-                  </p>
-                  <p>
-                    I used <a href="https://shiny.rstudio.com/articles/templates.html">HTML templates</a> to create a unique look for this <a href="https://shiny.rstudio.com/">Shiny application</a>. The code is structured using <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>. 
-                  </p>
-                </div>
+              <div class="col-sm-6">
+                
               </div>
             </div>
           </div>
-        </section>
-        -->
+        </section>  
+        
         <hr class="divider-d">
         <footer class="footer bg-dark">
           <div class="container">
             <div class="row">
               <div class="col-sm-6">
-                <p class="copyright font-alt">Stefan Schliebs</p>
+                <p class="copyright font-alt">DSA</p>
               </div>
               <div class="col-sm-6">
                 <div class="footer-social-links"><a href="https://www.linkedin.com/in/sschliebs/"><i class="fa fa-linkedin"></i></a><a href="https://github.com/nz-stefan/"><i class="fa fa-github"></i></a>
