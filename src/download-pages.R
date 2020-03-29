@@ -28,7 +28,7 @@ d_urls <- read.csv(F_URLS, stringsAsFactors = FALSE)
 
 # loop over all urls and download them one by one
 counter <- 0
-for (link in d_urls$urls[64:30599]) {
+for (link in d_urls$urls) {
   counter <- counter + 1
   loginfo("Processing URL #%d (%s)", counter, link)
   

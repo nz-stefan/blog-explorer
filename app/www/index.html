@@ -200,55 +200,76 @@
                     
                     <h4 class="font-alt">Data</h4>
                     <p>
-                      I am a fond reader of blog articles published on R-Bloggers.com. It is an aggregator for blogs about R and has been around for more than a decade. I thought it would be very interesting to see how the R scene has developed over the last 10 years. What topics were talked about in the past, what are people writing about today? Would we see the rise of Shiny, the tidyverse, Rmarkdown, CRAN releases, conference announcements?
-
-I scraped the blog data from R-Bloggers from their public archives using the super convenient <a href="https://github.com/tidyverse/rvest">rvest</a> package. The process is split into three phases to allow me later to change my mind about the particular processing of articles. 
+                      I am a fond reader of blog articles published on <a href="https://r-bloggers.com">R-Bloggers</a>. It is an aggregator for blogs about R and has been around for more than a decade. I thought it would be very interesting to see how the R scene has developed over the last 10 years. What topics were talked about in the past, what are people writing about today? Would we see the rise of Shiny, the tidyverse, Rmarkdown, CRAN releases, conference announcements?
+                    </p>
+                    <p>
+                      I scraped the blog data from R-Bloggers from their public archives using the super convenient <a href="https://github.com/tidyverse/rvest">rvest</a> package. The process is split into three phases to allow me later to change my mind about the particular processing of articles. 
                     </p>
                     
                     <ol>
                       <li>Obtain a list of links to articles published on R-Bloggers</li>
                       <li>Download each article from the link collection</li>
-                      <li> parse each document and combined them into a single dataframe</li>
+                      <li>Parse each document and combined them into a single dataframe</li>
                     </ol>
 
                     <p>
                       For each document I also collected meta information such as blog title, publication date, author and URLs to the original blog. In total I collected more than 30,000 articles published as early as Jan 2010.
                     </p>
+                    
                     <p>
-                      For the ongoing data refresh I download the R-Blogger RSS feeds every day using a script running in a Docker container on AWS on a daily schedule. The RSS feed is a XML file that contains the latest 25 articles published on the website. At the end of each month a second script in a second container combines the articles in all collected feeds with the 30,000 scraped articles and refreshes the topic model behind this application. 
+                      For the ongoing data refresh I download the R-Blogger RSS feeds every day using a script running in a Docker container on AWS on a daily schedule. The RSS feed is a XML file that contains the latest 25 articles published on the website. At the end of each month a second script in a second container combines the articles in all collected feeds with the 30,000 scraped articles and refreshes the topic model behind this application. So every month something new should appear in this Shiny app. 
                     </p>
 
                     <h4 class="font-alt">Topic Model</h4>
                     <p>
-                      I followed Julia Silge's methodology to determine the optimal number of topics. The process involved trainined several models with varying number of topics and then infer a reasonable topic number from a variety of diagnostic plots. The training took hours to complete, I let the machine run over night despite parallelising the computation.
+                      I followed Julia Silge's methodology to determine the optimal number of topics. The process involves training several models with varying number of topics and then infering a reasonable topic number from a variety of diagnostic plots. The training took many hours to complete, I let the machine run over night despite parallelising the computation.
                     </p>
                     
                     <p>
-                      The topic models are generated using the <a href="https://github.com/bstewart/stm">stm</a> package. Papers on the topic can be found <a href="https://www.structuraltopicmodel.com/">here</a>. Some code from the <a href="https://github.com/mikajoh/tidystm">tidystm</a> package was used to transform STM outputs into tidy format.
+                      The topic models are generated using the <a href="https://github.com/bstewart/stm">stm</a> package. Papers on the topic algorithm can be found <a href="https://www.structuraltopicmodel.com/">here</a>. Some code from the <a href="https://github.com/mikajoh/tidystm">tidystm</a> package was used to transform STM outputs into tidy format.
                     </p>
 
                     <h4 class="font-alt">Did it work?</h4>
                     <p>
-                      So did it actually work? Did the topic model identify relevant R trends? I think it did. Here are the results for the topics about (deep) machine learning, the rise of the tidyverse (<tt>dplyr</tt>), the popularity of Shiny and the interest about CRAN releases. Pretty good for an unsupervised method. Click on the image to enlarge.
+                      So did it actually work? Did the topic model identify relevant R trends? I think it did! Here are the results for three particular topics.  The top row of bar charts shows the overall prevalance of the shown topics. The middle row shows the estimated topic proportion across the corpus over time and the bottom row of word clouds presents the top terms in each of the topics. We see the increased interest in machine learning and deep neural networks, the rise of the tidyverse (lots of dplyr verbs) and the popularity of Shiny. Click on the image to enlarge.
+                    </p>
+                      
+                    <p>
+                      <a href="assets/images/topic-model-results.png">
+                        <img src="assets/images/topic-model-results.png" widh="100%" />
+                      </a>
+                    </p>
+
+                    <p>
+                      The topic correlation graph reveals an interesting cluster of correlated topics about specific machine learning aspects. There are two separate "modelling" topics, one about statistical models (linear/logistic regression, GLM, GAM, ANOVA) and the other about machine learning algorithms (decision trees, random forest, GBM, xgboost, train/test, validation). Related topics are about Bayesian inference (STAN, prior and posterior, MCMC), model scoring (measures, results, rules), cluster analysis (hierarchical clustering, PCA, dimensionality reduction), exploratory analysis (densities, distributions, outliers, medians and means), deep learning (neural networks, keras, tensorflow) and hypothesis testing (although this topic also contains several cricket terms which could indicate the content is about a different kind of test). Pretty good for an unsupervised algorithm!
                     </p>
                     
-                    <a href="assets/images/topic-model-results.png">
-                      <img src="assets/images/topic-model-results.png" widh="100%" />
-                    </a>
+                    <p>
+                      <a href="assets/images/topic-model-graph.png">
+                        <img src="assets/images/topic-model-graph.png" widh="100%" />
+                      </a>
+                    </p>
                     
-
+                    <p>
+                      Other big topics cover various types of visualisations (ggplot, maps), networks, time series forecasting, text mining, books and chapters, parallel processing, learning about Python, projects and tools and software, github, file formats, conference talks and presentations, APIs and Rmarkdown. There is even a topic about the US presidential election with spiking coverage in 2016 and 2012 (when the elections occurred).
+                    </p>
+                    
+                    <p>
+                      Overall, I am very happy with these results. In fact, I think they are quite astonishing. Without any additional information about this corpus, the topic model has identified a lot of meaningful topics and most topics are immediately recognizable as relevant R related content.
+                    </p>
+                    
                     <h4 class="font-alt">Application</h4>
                     <p>
                       I like beautiful data products and so I used <a href="https://shiny.rstudio.com/articles/templates.html">HTML templates</a> to create a unique look for this <a href="https://shiny.rstudio.com/">Shiny application</a>. The template is called <a href="https://markup.themewagon.com/titan/index.html">Titan</a> and is freely available. There was a bit more JavaScript foo necessary for the network visualisation.
                     </p>
                     
                     <p>
-                      The code is structured using <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>. 
+                      To improve readability, the code is structured using <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>. 
                     </p>
                     
                     <h4 class="font-alt">Deployment</h4>
                     <p>
-                      The development environment of this project is a <a href="https://hub.docker.com/r/rocker/rstudio/">Rocker</a> based <a href="https://www.docker.com/">Docker</a> container running the Open Source version of <a href="https://rstudio.com/products/rstudio/#rstudio-server">RStudio Server</a>. Docker allows to control all aspects of the development environment, i.e. operating system, system packages and R version. The versions of R packages are tracked using the <a href="https://github.com/rstudio/renv">renv</a> package. This setup intends to assure reproducibility of this app.
+                      The development environment of this project is a <a href="https://hub.docker.com/r/rocker/rstudio/">Rocker</a> based <a href="https://www.docker.com/">Docker</a> container running the Open Source version of <a href="https://rstudio.com/products/rstudio/#rstudio-server">RStudio Server</a>. Docker allows to control all aspects of the development environment, i.e. operating system, system packages and R version. The versions of R packages are tracked using the <a href="https://github.com/rstudio/renv">renv</a> package. The containerisation intends to simplify the setup of a working development environment.
                     </p>
                     
                     <p>
@@ -280,7 +301,7 @@ I scraped the blog data from R-Bloggers from their public archives using the sup
                 </div>
                 <div class="widget">
                   <h5 class="widget-title font-alt">Code</h5>
-                  <p>Code available on Github</p>
+                  <p>Code available on <a href="https://github.com/nz-stefan">Github</a></p>
                 </div>
               </div>
             </div>
@@ -293,15 +314,23 @@ I scraped the blog data from R-Bloggers from their public archives using the sup
               <div class="col-sm-6">
                 <div class="widget">
                   <h5 class="widget-title font-alt">Developed By</h5>
-                  <h5>Stefan Schliebs</h5>
                   <p>
-                    <a href="https://www.linkedin.com/in/sschliebs/"><i class="fa fa-linkedin" style="font-size:20px; padding-right:25px"></i></a>
+                    Stefan Schliebs<br>
+                    Auckland, New Zealand
+                  </p>
+                  <p>
+                    <a href="https://www.linkedin.com/in/sschliebs/"><i class="fa fa-linkedin" style="font-size:20px; padding-right:15px"></i></a>
                     <a href="https://github.com/nz-stefan/"><i class="fa fa-github" style="font-size:20px; padding-right:25px"></i></a>
                   </p>
                 </div>
               </div>
               <div class="col-sm-6">
-                
+                <div class="widget">
+                  <h5 class="widget-title font-alt">Learn Shiny?</h5>
+                  <p>
+                    Check out the <a href="https://www.datascienceacademy.co.nz">Data Science Academy</a> for in-person workshops and tutoriasl in New Zealand.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -311,13 +340,13 @@ I scraped the blog data from R-Bloggers from their public archives using the sup
         <footer class="footer bg-dark">
           <div class="container">
             <div class="row">
-              <div class="col-sm-6">
-                <p class="copyright font-alt">DSA</p>
+              <div class="col-sm-12">
+                <p class="copyright font-alt">DSA, 2020</p>
               </div>
-              <div class="col-sm-6">
+              <!--div class="col-sm-6">
                 <div class="footer-social-links"><a href="https://www.linkedin.com/in/sschliebs/"><i class="fa fa-linkedin"></i></a><a href="https://github.com/nz-stefan/"><i class="fa fa-github"></i></a>
                 </div>
-              </div>
+              </div-->
             </div>
           </div>
         </footer>

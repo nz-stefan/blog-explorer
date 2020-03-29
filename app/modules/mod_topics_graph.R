@@ -135,14 +135,14 @@ topics_graph <- function(input, output, session, d_data_model) {
 
       # use straight edges to improve rendering performance
       visEdges(smooth = FALSE, color = list(opacity = 0.5)) %>%
-      
+
       # configure layouting algorithm
       visPhysics(
         solver = "forceAtlas2Based",
-        timestep = 0.5,
+        timestep = 1,
         minVelocity = 1,
         maxVelocity = 30,
-        forceAtlas2Based = list(gravitationalConstant = -500, damping = 1),
+        forceAtlas2Based = list(gravitationalConstant = -800, damping = 1),
         stabilization = list(iterations = 600, updateInterval = 10),
         adaptiveTimestep = TRUE
       ) %>% 
@@ -163,7 +163,7 @@ topics_graph <- function(input, output, session, d_data_model) {
     # select a random top 10 topic to pre-select when the network graph finished building
     node_id <- d_topic_prevalence()$topic[sample(1:10, 1)]
     visNetworkProxy(ns("graph")) %>% 
-      visFocus(node_id, scale = 0.075) %>% 
+      visFocus(node_id, scale = 0.04) %>% 
       visSelectNodes(node_id)
   })
   
