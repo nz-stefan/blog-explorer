@@ -214,10 +214,10 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "0.8.4",
+      "Version": "0.8.5",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3ecb1deedd4c4ad6ebf4605d263616f2"
+      "Hash": "57a42ddf80f429764ff7987128c3fd0a"
     },
     "dtt": {
       "Package": "dtt",
